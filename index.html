@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filterable Product List</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+        }
+
+        .filter-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .filter-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .filter-btn.active {
+            background-color: #2ecc71;
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .product-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 250px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .product-category {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #7f8c8d;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Our Products</h1>
+    </header>
+
+    <section class="filter-section">
+        <button class="filter-btn active" data-category="All">All</button>
+        <button class="filter-btn" data-category="Electronics">Electronics</button>
+        <button class="filter-btn" data-category="Clothing">Clothing</button>
+        <button class="filter-btn" data-category="Books">Books</button>
+    </section>
+
+    <main>
+        <div class="product-container" id="product-container">
+            <!-- Products will be dynamically inserted here -->
+        </div>
+    </main>
+
+    <script>
+        // Product Data Array
+        const products = [
+            { name: "Smartphone", category: "Electronics", price: 699 },
+            { name: "Laptop", category: "Electronics", price: 1299 },
+            { name: "Jeans", category: "Clothing", price: 49 },
+            { name: "T-Shirt", category: "Clothing", price: 19 },
+            { name: "Novel Book", category: "Books", price: 15 },
+            { name: "Headphones", category: "Electronics", price: 199 },
+            { name: "Jacket", category: "Clothing", price: 89 },
+            { name: "Cookbook", category: "Books", price: 25 },
+            { name: "Tablet", category: "Electronics", price: 399 },
+            { name: "Sneakers", category: "Clothing", price: 59 }
+        ];
+
+        // Function to display products
+        function displayProducts(productList) {
+            const container = document.getElementById('product-container');
+            container.innerHTML = ""; // Clear existing products
+
+            productList.forEach(product => {
+                // Create product item elements
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product-item');
+
+                const name = document.createElement('h3');
+                name.classList.add('product-name');
+                name.textContent = product.name;
+
+                const category = document.createElement('p');
+                category.classList.add('product-category');
+                category.textContent = `Category: ${product.category}`;
+
+                const price = document.createElement('p');
+                price.classList.add('product-price');
+                price.textContent = `$${product.price.toFixed(2)}`;
+
+                // Append elements to product div
+                productDiv.appendChild(name);
+                productDiv.appendChild(category);
+                productDiv.appendChild(price);
+
+                // Append product div to container
+                container.appendChild(productDiv);
+            });
+        }
+
+        // Function to handle filtering
+        function filterProducts(category) {
+            if (category === "All") {
+                displayProducts(products);
+            } else {
+                const filtered = products.filter(product => product.category === category);
+                displayProducts(filtered);
+            }
+        }
+
+        // Initialize display with all products
+        displayProducts(products);
+
+        // Set up filter buttons
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove 'active' class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add 'active' class to the clicked button
+                button.classList.add('active');
+
+                const category = button.getAttribute('data-category');
+                filterProducts(category);
+            });
+        });
+    </script>
+</body>
+</html>
